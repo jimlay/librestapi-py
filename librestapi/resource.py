@@ -10,7 +10,7 @@ class Resource(object):
         auth_required=True,
         name=None
     ):
-        self.client = client,
+        self.client = client
         self.api_version = api_version
         self.path = path
         if not path:
@@ -22,7 +22,7 @@ class Resource(object):
         self,
         resource_id=None
     ):
-        path = [this.client.api_root]
+        path = [self.client.api_root]
 
         if self.api_version:
             path.append(self.api_version)
@@ -89,7 +89,7 @@ class Resource(object):
     def retrieve(
         self,
         resource_id=None,
-        data={}
+        data={},
         headers={}
     ):
         method = 'get'
@@ -97,7 +97,7 @@ class Resource(object):
             method,
             data=data,
             headers=headers,
-            resource=resource_id
+            resource_id=resource_id
         )
 
     def destroy(

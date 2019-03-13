@@ -22,8 +22,8 @@ class Credentials(object):
         access_token,
         current_identity
     ):
-        this.access_token = access_token
-        this.current_identity = current_identity
+        self.access_token = access_token
+        self.current_identity = current_identity
 
 
 class Client(object):
@@ -31,7 +31,7 @@ class Client(object):
         self,
         api_key=None,
         api_secret=None,
-        api_root={},
+        api_root='/',
         auth_uri=None,
         *args,
         **kwargs
@@ -47,13 +47,9 @@ class Client(object):
 
     def set_credentials(
         self,
-        access_token,
-        current_identity
+        **credentials
     ):
-        self.credentials = Credentials(
-            access_token,
-            current_identity
-        )
+        self.credentials = credentials
 
     def invalidate_credentials(self):
         self.credentials = None
@@ -65,16 +61,18 @@ class Client(object):
         if not headers:
             headers = {}
 
-        credentials = this.get_credentials()
+        credentials = self.get_credentials()
         if credentials:
-            if credentials.access_token:
+            access_token = credentials.get('access_token')
+            if access_token:
                 headers['Authroization'] = ' '.join([
                     'Bearer',
-                    credentials.access_token
+                    access_token
                 ])
 
-            if credentials.current_identity:
-                headers['Current-Identity'] = credentials.current_identity
+            current_identity = credentials.get('current_identity')
+            if current_identity:
+                headers['Current-Identity'] = current_identity
 
         headers['Accept'] = 'application/json'
 
@@ -97,7 +95,7 @@ class Client(object):
         request_args = {}
 
         if None is not data:
-            reqeust_args['data'] = data
+            request_args['data'] = data
 
         response = method_func(uri, **request_args)
         response.raise_for_status()
@@ -128,17 +126,6 @@ class Client(object):
             response_data,
             content_type,
             response.status_code
-        )
-
-    def authenticate(self, user_credentials):
-        method = 'post'
-        uri = self.auth_uri
-        data = user_credentials
-
-        return self.request(
-            method,
-            uri,
-            data
         )
 
     class MethodNotSupportedException(Exception):
