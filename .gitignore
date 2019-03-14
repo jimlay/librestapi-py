@@ -1,0 +1,6 @@
+.*
+*~
+build/
+dist/
+librestapi.egg-info/
+*/__pycache__/

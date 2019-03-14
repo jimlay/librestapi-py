@@ -56,7 +56,7 @@ class Client(object):
 
     def _assemble_headers(
         self,
-        headers
+        **headers
     ):
         if not headers:
             headers = {}
@@ -65,7 +65,7 @@ class Client(object):
         if credentials:
             access_token = credentials.get('access_token')
             if access_token:
-                headers['Authroization'] = ' '.join([
+                headers['Authorization'] = ' '.join([
                     'Bearer',
                     access_token
                 ])
@@ -85,7 +85,7 @@ class Client(object):
         data,
         headers
     ):
-        headers = self._assemble_headers(headers)
+        headers = self._assemble_headers(**headers)
 
         method_func = getattr(requests, method.lower(), None)
 
@@ -104,7 +104,7 @@ class Client(object):
         content_type = response_headers.get('content-type')
 
         if 'text/' in content_type:
-            response_data = response.text()
+            response_data = response.text
 
         elif (
             'application/octet-stream' == content_type or
