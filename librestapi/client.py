@@ -82,9 +82,10 @@ class Client(object):
         self,
         method,
         uri,
-        data,
-        headers
-    ):
+        data = None,
+        headers = None,
+        params = None
+     ):
         headers = self._assemble_headers(**headers)
 
         method_func = getattr(requests, method.lower(), None)
@@ -96,6 +97,9 @@ class Client(object):
 
         if None is not data:
             request_args['data'] = data
+
+        if None is not params:
+            request_args['params'] = params
 
         response = method_func(uri, **request_args)
         response.raise_for_status()

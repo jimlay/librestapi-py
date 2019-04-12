@@ -41,6 +41,7 @@ class Resource(object):
         self,
         method,
         data={},
+        params={},
         headers={},
         resource_id=None
     ):
@@ -57,7 +58,8 @@ class Resource(object):
             method,
             uri,
             data,
-            headers
+            headers,
+            params
         )
 
     def create(
@@ -90,12 +92,14 @@ class Resource(object):
         self,
         resource_id=None,
         data={},
+        params={},
         headers={}
     ):
         method = 'get'
         return self.request(
             method,
             data=data,
+            params=params,
             headers=headers,
             resource_id=resource_id
         )
